@@ -5,7 +5,7 @@
 ```
 git clone https://github.com/pd1drone/SmartHelmet
 ```
-2. Get the LiquidCrystal_I2C, RTClib, Time, UnixTime folders and copy it to the folder libraries it is located the arduino codes has been save it will have a libraries folder. The default folder of arduino is in /Documents/Arduino/libraries/
+2. Get the DHT_sensor_library, folder and copy it to the folder libraries it is located the arduino codes has been save it will have a libraries folder. The default folder of arduino is in /Documents/Arduino/libraries/
 ![Libraries-Directory](Libraries-Directory.PNG)
 
 3. Setup the Schematic Diagram Below
