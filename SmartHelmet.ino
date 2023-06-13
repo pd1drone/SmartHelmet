@@ -105,8 +105,8 @@ void loop() {
   if(IRSensorPreviousValue == 1){
     if (IRSensorValue == 0) {
       servoAutoFit.attach(3);
-      servoAutoFit.write(180);
-      delay(5000);
+      servoAutoFit.write(180);  // palitan mo to ng 0 para umikot ng opposite (AUTOFIT TO)
+      delay(5000);  // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo (AUTOFIT TO)
       servoAutoFit.detach();
       IRSensorPreviousValue = 0;
     }
@@ -115,8 +115,8 @@ void loop() {
   if (PushbtnDownValue == 0) {
     while (true) {
       PushbtnDownValue = digitalRead(PushBtnDown);
-      servoAutoFit.attach(3);
-      servoAutoFit.write(0);
+      servoAutoFit.attach(3); 
+      servoAutoFit.write(0); // palitan mo to ng 180 para umikot ng opposite (AUTOFIT TO)
 
       if (PushbtnDownValue == 1) {
         servoAutoFit.detach();
