@@ -31,8 +31,6 @@ void setup() {
   pinMode(PushBtnDown, INPUT_PULLUP);
   pinMode(EnableManualVisor, INPUT_PULLUP);
   pinMode(VisorBtn, INPUT_PULLUP);
-  servoVisor.attach(5);
-  servoVisor.write(VisorDown);
 }
 
 void loop() {
@@ -63,12 +61,18 @@ void loop() {
     Serial.print(F("°C "));
     Serial.println();
     if (temp >= 31.0) {
-      servoVisor.write(VisorUp);
+      servoVisor.attach(5);
+      servoVisor.write(180); // palitan mo to ng 0 para umikot ng opposite
+      delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
+      servoVisor.detach();
       IsVisorDown = false;
     }
 
     if (temp <= 28.0) {
-      servoVisor.write(VisorDown);
+      servoVisor.attach(5);
+      servoVisor.write(0); // palitan mo to ng 180 para umikot ng opposite
+      delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
+      servoVisor.detach();
       IsVisorDown = true;
     }
 
@@ -78,9 +82,15 @@ void loop() {
       int VisorManualValue = digitalRead(VisorBtn);
       if (VisorManualValue == 1) {
         if (IsVisorDown) {
-          servoVisor.write(VisorUp);
+          servoVisor.attach(5);
+          servoVisor.write(180); // palitan mo to ng 0 para umikot ng opposite
+          delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
+          servoVisor.detach();
         } else if (!IsVisorDown) {
-          servoVisor.write(VisorDown);
+          servoVisor.attach(5);
+          servoVisor.write(0); // palitan mo to ng 0 para umikot ng opposite
+          delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
+          servoVisor.detach();
         }
         IsVisorDown = !IsVisorDown;
         break;
@@ -101,9 +111,6 @@ void loop() {
       IRSensorPreviousValue = 0;
     }
   }
-
-
-
 
   if (PushbtnDownValue == 0) {
     while (true) {
