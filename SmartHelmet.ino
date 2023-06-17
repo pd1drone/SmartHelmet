@@ -18,8 +18,8 @@ Servo servoVisor;
 
 bool IsAutomaticVisor = true;
 bool IsVisorDown = true;
-int VisorDown = 0;
-int VisorUp = 135;
+int VisorDown = 0; // palitan mo ung value neto kung sobra sa pagbaba yung visor (increase mo lang ung 0)
+int VisorUp = 135; // palitan mo lang value neto kung kulang sa pagtaas ng visor (increase mo lang ung 135)
 
 int IRSensorPreviousValue = 1;
 
