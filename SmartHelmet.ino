@@ -1,4 +1,3 @@
-
 #include <Servo.h>
 #include "DHT.h"
 #define DHTPIN 4
@@ -18,8 +17,10 @@ Servo servoVisor;
 
 bool IsAutomaticVisor = true;
 bool IsVisorDown = true;
-int VisorDown = 0;
-int VisorUp = 135;
+int VisorDown = 0; // palitan mo to kung anong angle ng down ung visor
+int VisorUp = 135; //palitan mo to kung anong angle ng up ung visor
+int FitStrap = 180; // palitan mo to kung anong angle ng pag fit ng strap
+int UnFitStrap = 0; // palitan mo to kung anong angle ng pag unfit ng strap
 
 int IRSensorPreviousValue = 1;
 
@@ -31,6 +32,10 @@ void setup() {
   pinMode(PushBtnDown, INPUT_PULLUP);
   pinMode(EnableManualVisor, INPUT_PULLUP);
   pinMode(VisorBtn, INPUT_PULLUP);
+  servoVisor.attach(5);
+  servoVisor.write(VisorDown);
+  servoAutoFit.attach(3);
+  servoAutoFit.write(UnFitStrap);
 }
 
 void loop() {
@@ -46,9 +51,9 @@ void loop() {
   Serial.println(enableVisorValue);
 
 
-  while (enableVisorValue == 0) {
+  while (enableVisorValue == 1) {
     int VisorValue = digitalRead(EnableManualVisor);
-    if (VisorValue == 1) {
+    if (VisorValue == 0) {
       IsAutomaticVisor = !IsAutomaticVisor;
       break;
     }
@@ -61,36 +66,24 @@ void loop() {
     Serial.print(F("°C "));
     Serial.println();
     if (temp >= 31.0) {
-      servoVisor.attach(5);
-      servoVisor.write(180); // palitan mo to ng 0 para umikot ng opposite
-      delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
-      servoVisor.detach();
+      servoVisor.write(VisorUp);
       IsVisorDown = false;
     }
 
     if (temp <= 28.0) {
-      servoVisor.attach(5);
-      servoVisor.write(0); // palitan mo to ng 180 para umikot ng opposite
-      delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
-      servoVisor.detach();
+      servoVisor.write(VisorDown);
       IsVisorDown = true;
     }
 
   } else {
     int VisorManualValue = digitalRead(VisorBtn);
-    while (VisorManualValue == 0) {
+    while (VisorManualValue == 1) {
       int VisorManualValue = digitalRead(VisorBtn);
-      if (VisorManualValue == 1) {
+      if (VisorManualValue == 0) {
         if (IsVisorDown) {
-          servoVisor.attach(5);
-          servoVisor.write(180); // palitan mo to ng 0 para umikot ng opposite
-          delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
-          servoVisor.detach();
+          servoVisor.write(VisorUp);
         } else if (!IsVisorDown) {
-          servoVisor.attach(5);
-          servoVisor.write(0); // palitan mo to ng 0 para umikot ng opposite
-          delay(3000); // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo
-          servoVisor.detach();
+          servoVisor.write(VisorDown);
         }
         IsVisorDown = !IsVisorDown;
         break;
@@ -98,27 +91,22 @@ void loop() {
     }
   }
 
-  if (IRSensorValue == 1){
-    IRSensorPreviousValue = 1;
+  if (IRSensorValue == 0){
+    IRSensorPreviousValue = 0;
   }
 
-  if(IRSensorPreviousValue == 1){
-    if (IRSensorValue == 0) {
-      servoAutoFit.attach(3);
-      servoAutoFit.write(180);  // palitan mo to ng 0 para umikot ng opposite (AUTOFIT TO)
-      delay(5000);  // palitan mo to kung need mo magdagdag or magbawas ng time ng pagikot ng servo (AUTOFIT TO)
-      servoAutoFit.detach();
-      IRSensorPreviousValue = 0;
+  if(IRSensorPreviousValue == 0){
+    if (IRSensorValue == 1) {
+      servoAutoFit.write(FitStrap);
+      IRSensorPreviousValue = 1;
     }
   }
 
-  if (PushbtnDownValue == 0) {
+  if (PushbtnDownValue == 1) {
     while (true) {
       PushbtnDownValue = digitalRead(PushBtnDown);
-      servoAutoFit.attach(3); 
-      servoAutoFit.write(0); // palitan mo to ng 180 para umikot ng opposite (AUTOFIT TO)
-      if (PushbtnDownValue == 1) {
-        servoAutoFit.detach();
+      servoAutoFit.write(UnFitStrap);
+      if (PushbtnDownValue == 0) {
         break;
       }
     }
