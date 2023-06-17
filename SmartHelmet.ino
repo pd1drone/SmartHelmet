@@ -91,14 +91,14 @@ void loop() {
     }
   }
 
-  if (IRSensorValue == 0){
-    IRSensorPreviousValue = 0;
+  if (IRSensorValue == 1){
+    IRSensorPreviousValue = 1;
   }
 
-  if(IRSensorPreviousValue == 0){
-    if (IRSensorValue == 1) {
+  if(IRSensorPreviousValue == 1){
+    if (IRSensorValue == 0) {
       servoAutoFit.write(FitStrap);
-      IRSensorPreviousValue = 1;
+      IRSensorPreviousValue = 0;
     }
   }
 
