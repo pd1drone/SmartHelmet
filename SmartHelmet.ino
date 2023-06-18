@@ -19,8 +19,8 @@ bool IsAutomaticVisor = true;
 bool IsVisorDown = true;
 int VisorDown = 0; // palitan mo to kung anong angle ng down ung visor
 int VisorUp = 135; //palitan mo to kung anong angle ng up ung visor
-int FitStrap = 180; // palitan mo to kung anong angle ng pag fit ng strap
-int UnFitStrap = 0; // palitan mo to kung anong angle ng pag unfit ng strap
+// int FitStrap = 180; // palitan mo to kung anong angle ng pag fit ng strap
+// int UnFitStrap = 0; // palitan mo to kung anong angle ng pag unfit ng strap
 
 int IRSensorPreviousValue = 1;
 
@@ -34,8 +34,8 @@ void setup() {
   pinMode(VisorBtn, INPUT_PULLUP);
   servoVisor.attach(5);
   servoVisor.write(VisorDown);
-  servoAutoFit.attach(3);
-  servoAutoFit.write(UnFitStrap);
+  // servoAutoFit.attach(3);
+  // servoAutoFit.write(UnFitStrap);
 }
 
 void loop() {
@@ -51,9 +51,9 @@ void loop() {
   Serial.println(enableVisorValue);
 
 
-  while (enableVisorValue == 1) {
+  while (enableVisorValue == 0) {
     int VisorValue = digitalRead(EnableManualVisor);
-    if (VisorValue == 0) {
+    if (VisorValue == 1) {
       IsAutomaticVisor = !IsAutomaticVisor;
       break;
     }
@@ -77,9 +77,9 @@ void loop() {
 
   } else {
     int VisorManualValue = digitalRead(VisorBtn);
-    while (VisorManualValue == 1) {
+    while (VisorManualValue == 0) {
       int VisorManualValue = digitalRead(VisorBtn);
-      if (VisorManualValue == 0) {
+      if (VisorManualValue == 1) {
         if (IsVisorDown) {
           servoVisor.write(VisorUp);
         } else if (!IsVisorDown) {
@@ -97,16 +97,24 @@ void loop() {
 
   if(IRSensorPreviousValue == 1){
     if (IRSensorValue == 0) {
-      servoAutoFit.write(FitStrap);
+      //servoAutoFit.write(FitStrap);
+      servoAutoFit.attach(3);
+      servoAutoFit.write(180);
+      delay(2000);
+      servoAutoFit.detach();
       IRSensorPreviousValue = 0;
     }
   }
 
-  if (PushbtnDownValue == 1) {
+  if (PushbtnDownValue == 0 {
     while (true) {
       PushbtnDownValue = digitalRead(PushBtnDown);
-      servoAutoFit.write(UnFitStrap);
-      if (PushbtnDownValue == 0) {
+      //servoAutoFit.write(UnFitStrap);
+      servoAutoFit.attach(3);
+      servoAutoFit.write(0);
+
+      if (PushbtnDownValue == 1) {
+        servoAutoFit.detach();
         break;
       }
     }

@@ -24,8 +24,12 @@ void setup() {
   pinMode(VisorBtn, INPUT_PULLUP);
   servoVisor.attach(5);
   servoVisor.write(VisorDown);
+  delay(2000);
+  servoVisor.detach();
   servoAutoFit.attach(3);
   servoAutoFit.write(UnFitStrap);
+  delay(2000);
+  servoAutoFit.detach();
 }
 
 void loop() {
@@ -37,9 +41,23 @@ void loop() {
         int VisorManualValue = digitalRead(VisorBtn);
         if (VisorManualValue == 0) {
         if (IsVisorDown) {
-            servoVisor.write(VisorUp);
+            //servoVisor.write(VisorUp);
+            servoVisor.attach(5);
+            Serial.println("VISOR UP");
+            for (int posUP = VisorDown; VisorUp >= posUP ; posUP += 5) { 
+                servoVisor.write(posUP);   
+                delay(15);      
+            }
+            servoVisor.detach();
         } else if (!IsVisorDown) {
-            servoVisor.write(VisorDown);
+            //servoVisor.write(VisorDown);
+            servoVisor.attach(5);
+            Serial.println("VISOR DOWN");
+            for (int posDown = VisorUp; VisorDown <= posDown ; posDown -= 5) { 
+                servoVisor.write(posDown);   
+                delay(15);      
+            }
+            servoVisor.detach();
         }
         IsVisorDown = !IsVisorDown;
         break;
@@ -50,9 +68,23 @@ void loop() {
         int PushbtnDownValue= digitalRead(PushBtnDown);
         if (PushbtnDownValue == 0) {
         if (IsUnfit) {
-            servoAutoFit.write(FitStrap);
+            //servoAutoFit.write(FitStrap);
+            servoAutoFit.attach(3);
+            Serial.println("FIT Strap");
+            for (int pos = UnFitStrap; pos <= FitStrap; pos += 5) { 
+                servoAutoFit.write(pos);   
+                delay(15);      
+            }
+          servoAutoFit.detach();
         } else if (!IsUnfit) {
-            servoAutoFit.write(UnFitStrap);
+           // servoAutoFit.write(UnFitStrap);
+            servoAutoFit.attach(3);
+            Serial.println("UNFIT Strap");
+            for (int pos = FitStrap; pos >= UnFitStrap; pos -= 5) { 
+                servoAutoFit.write(pos);   
+                delay(15);      
+            }
+          servoAutoFit.detach();
         }
         IsUnfit = !IsUnfit;
         break;
