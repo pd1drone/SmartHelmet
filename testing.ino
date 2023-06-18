@@ -20,10 +20,7 @@ int IRSensorPreviousValue = 1;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  dht.begin();
-  pinMode(IRSensor, INPUT);
   pinMode(PushBtnDown, INPUT_PULLUP);
-  pinMode(EnableManualVisor, INPUT_PULLUP);
   pinMode(VisorBtn, INPUT_PULLUP);
   servoVisor.attach(5);
   servoVisor.write(VisorDown);
@@ -61,5 +58,5 @@ void loop() {
         break;
         }
     }
-    
+
 }
